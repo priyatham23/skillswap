@@ -1,0 +1,11 @@
+# Byte-compiled / classes
+bin/
+sources.txt
+*.log
+
+# Editor & Antigravity artifacts
+.gemini/
+.idea/
+.vscode/
+*.swp
+.DS_Store

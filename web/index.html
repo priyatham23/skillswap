@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SkillSwap | Student-Powered Skill-Sharing & Learning Community</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="bg-mesh"></div>
+
+  <div id="app-root">
+    <!-- Sidebar Navigation -->
+    <aside class="app-sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-icon">⇄</div>
+        <div>
+          <div class="brand-title">SkillSwap</div>
+          <span class="brand-subtitle">Student Learning Community</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-menu">
+        <div class="nav-label">Core Learning</div>
+        <div class="nav-item active" data-route="explore" onclick="App.navigate('explore')">
+          <span class="nav-icon">🔍</span>
+          <span>Explore Skills</span>
+        </div>
+        <div class="nav-item" data-route="sessions" onclick="App.navigate('sessions')">
+          <span class="nav-icon">📅</span>
+          <span>Sessions & Rooms</span>
+          <span class="nav-badge accent" id="active-sessions-badge">Live</span>
+        </div>
+        <div class="nav-item" data-route="quiz" onclick="App.navigate('quiz')">
+          <span class="nav-icon">🧪</span>
+          <span>Skill Tests & Badges</span>
+        </div>
+
+        <div class="nav-label">Profile & Economy</div>
+        <div class="nav-item" data-route="profile" onclick="App.navigate('profile')">
+          <span class="nav-icon">👤</span>
+          <span>Profile</span>
+        </div>
+        <div class="nav-item" data-route="wallet" onclick="App.navigate('wallet')">
+          <span class="nav-icon">💳</span>
+          <span>Credits & Escrow</span>
+        </div>
+
+        <div class="nav-label">Community & Growth</div>
+        <div class="nav-item" data-route="mentors" onclick="App.navigate('mentors')">
+          <span class="nav-icon">🎓</span>
+          <span>Skill Mentors</span>
+        </div>
+        <div class="nav-item" data-route="community" onclick="App.navigate('community')">
+          <span class="nav-icon">🌐</span>
+          <span>Hackathons & Chat</span>
+        </div>
+        <div class="nav-item" data-route="roadmaps" onclick="App.navigate('roadmaps')">
+          <span class="nav-icon">🗺️</span>
+          <span>Learning Roadmaps</span>
+        </div>
+
+        <div class="nav-label" id="admin-nav-label" style="display: none;">Administration</div>
+        <div class="nav-item" id="nav-tab-admin" style="display: none;" data-route="admin" onclick="App.navigate('admin')">
+          <span class="nav-icon">🛡️</span>
+          <span>Admin & Verification</span>
+        </div>
+      </nav>
+
+      <!-- User Mini Profile / Fast Login in Sidebar Footer -->
+      <div class="sidebar-footer" id="sidebar-user-box">
+        <!-- Injected dynamically by Auth.updateHeaderUI() -->
+      </div>
+    </aside>
+
+    <!-- Main Workspace -->
+    <main class="app-main">
+      <!-- Top Navbar -->
+      <header class="app-navbar">
+        <div class="nav-search-bar">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" class="nav-search-input" placeholder="Search mentors, skills (e.g. Java, ML, React)..." onkeydown="if(event.key==='Enter') { App.navigate('explore'); setTimeout(() => { const i = document.getElementById('teacher-search-query'); if(i) { i.value = this.value; Matching.filterTeachers(); } }, 150); }"/>
+        </div>
+
+        <div class="nav-actions">
+          <!-- Credit Balance Pill with Escrow Guarantee -->
+          <div class="credit-pill" onclick="Wallet.openRechargeModal()" title="Click to Recharge Credits">
+            <div class="credit-coin">CR</div>
+            <span class="credit-amount" id="nav-credit-amount">100 Credits</span>
+            <span class="credit-escrow-badge" id="nav-escrow-amount">0 in Escrow</span>
+          </div>
+
+          <!-- Quick Demo Switcher Pill -->
+          <button class="btn btn-secondary btn-sm" onclick="App.navigate('login')" title="Switch Demo Users (Priya, Rahul, Ananya, Admin)">
+            ⚡ Quick Demo Accounts
+          </button>
+
+          <!-- Notifications Bell -->
+          <div class="icon-btn" onclick="App.openNotifications()" title="Notifications">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+            <div class="icon-badge-dot" id="notif-badge-dot" style="display: none;"></div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Dynamic Route Views Container -->
+      <section id="view-explore" class="route-view page-container">
+        <div id="matching-content-area"></div>
+      </section>
+
+      <section id="view-sessions" class="route-view page-container" style="display: none;">
+        <div id="sessions-content-area"></div>
+      </section>
+
+      <section id="view-quiz" class="route-view page-container" style="display: none;">
+        <div id="quiz-content-area"></div>
+      </section>
+
+      <section id="view-profile" class="route-view page-container" style="display: none;">
+        <div id="profile-content-area"></div>
+      </section>
+
+      <section id="view-wallet" class="route-view page-container" style="display: none;">
+        <div id="wallet-content-area"></div>
+      </section>
+
+      <section id="view-community" class="route-view page-container" style="display: none;">
+        <div id="community-content-area"></div>
+      </section>
+
+      <section id="view-mentors" class="route-view page-container" style="display: none;">
+        <div id="mentors-content-area"></div>
+      </section>
+
+      <section id="view-roadmaps" class="route-view page-container" style="display: none;">
+        <div id="roadmaps-content-area"></div>
+      </section>
+
+      <section id="view-admin" class="route-view page-container" style="display: none;">
+        <div id="admin-content-area"></div>
+      </section>
+
+      <section id="view-login" class="route-view page-container" style="display: none;">
+        <div id="login-content-area"></div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Global Reusable Modal Backdrop -->
+  <div class="modal-backdrop" id="global-modal-backdrop">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="global-modal-title" style="font-size: 1.25rem; font-weight: 700; color: #fff;">Modal Title</h3>
+        <button class="modal-close-btn" onclick="App.closeModal()">&times;</button>
+      </div>
+      <div id="global-modal-body">
+        <!-- Content injected dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Global Floating Toast Notification Container -->
+  <div id="toast-container"></div>
+
+  <!-- Application Modular Scripts -->
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/profile.js"></script>
+  <script src="js/matching.js"></script>
+  <script src="js/sessions.js"></script>
+  <script src="js/wallet.js"></script>
+  <script src="js/quiz.js"></script>
+  <script src="js/community.js"></script>
+  <script src="js/roadmaps.js"></script>
+  <script src="js/admin.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
+

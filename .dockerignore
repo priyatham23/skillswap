@@ -1,0 +1,6 @@
+.git
+.gemini
+bin
+*.log
+.DS_Store
+sources.txt
