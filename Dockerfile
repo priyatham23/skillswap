@@ -40,3 +40,4 @@ EXPOSE 8080
 
 # Run the SkillSwap Java backend
 CMD ["sh", "-c", "java -cp \"bin:lib/*\" com.skillswap.Main"]
+

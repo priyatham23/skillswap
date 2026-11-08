@@ -11,3 +11,4 @@ echo "Compiling $(wc -l < sources.txt) Java source files..."
 javac -cp "lib/*" -d bin @sources.txt
 
 echo "=== Build finished successfully ==="
+

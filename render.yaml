@@ -20,3 +20,4 @@ services:
         sync: false
       - key: DB_PASSWORD
         sync: false
+
